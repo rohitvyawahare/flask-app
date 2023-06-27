@@ -1,0 +1,106 @@
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "flask"
+  namespace: "default"
+  labels:
+    app: "flask"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "flask"
+  template:
+    metadata:
+      labels:
+        app: "flask"
+    spec:
+      containers:
+      - name: "flask"
+        image: "rohir/flask-app"
+
+
+---
+apiVersion: "v1"
+kind: "Service"
+metadata:
+  name: "flask-service"
+  namespace: "default"
+  labels:
+    app: "flask"
+spec:
+  ports:
+  - protocol: "TCP"
+    port: 80
+    targetPort: 5000
+    nodePort: 30500
+  selector:
+    app: "flask"
+  type: "NodePort"
+
+---
+apiVersion: "v1"
+kind: "ConfigMap"
+metadata:
+  name: "postgres-config"
+  namespace: "default"
+  labels:
+    app: "postgres"
+data:
+  POSTGRES_DB: "demo_db"
+  POSTGRES_USER: "rohit"
+  POSTGRES_PASSWORD: "redhat"
+
+
+---
+apiVersion: "apps/v1"
+kind: "Deployment"
+metadata:
+  name: "postgres"
+  namespace: "default"
+  labels:
+    app: "postgres"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: "postgres"
+  template:
+    metadata:
+      labels:
+        app: "postgres"
+    spec:
+      containers:
+      - name: "postgres"
+        image: "postgres:9.6.2"
+        env:
+        - name: "POSTGRES_DB"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_DB"
+              name: "postgres-config"
+        - name: "POSTGRES_USER"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_USER"
+              name: "postgres-config"
+        - name: "POSTGRES_PASSWORD"
+          valueFrom:
+            configMapKeyRef:
+              key: "POSTGRES_PASSWORD"
+              name: "postgres-config"
+        ports:
+          - containerPort: 5432
+            name: postgres
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: postgres
+spec:
+  ports:
+    - port: 5432
+  selector:
+    app: postgres
+
+
