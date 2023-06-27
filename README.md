@@ -1,4 +1,5 @@
-#Deploy Flask Application on Kubernetes via Jenkins
+#Deploy Flask Application on Kubernetes using - Jenkins + Git + Kubernetes
+----------------------------------------------------------------------------
 
 ## Project Description
 This project focuses on automating the deployment of a Flask web application on a Kubernetes cluster using Jenkins. The application is containerized using Docker, and the Docker images are pushed to Docker Hub.
@@ -15,13 +16,13 @@ Before proceeding with the installation, ensure that you have the following prer
 
 
 ## Directory Structure
-Dockerfile -->> docker file to build flask app image
-Jenkinsfile -->> to automate build and deploy process
-app.py -->> contains applicaton code
-config.cfg -->> store postgres DB creds 
-deployment.yaml -->> menifest file to deploy resources on kubernetes cluster
-entrypoint.sh -->> contains entrypoint command to run a container
-requirements.txt -->> store all the dependencies to run application
+- Dockerfile -->> docker file to build flask app image
+- Jenkinsfile -->> to automate build and deploy process
+- app.py -->> contains applicaton code
+- config.cfg -->> store postgres DB creds 
+- deployment.yaml -->> menifest file to deploy resources on kubernetes cluster
+- entrypoint.sh -->> contains entrypoint command to run a container
+- requirements.txt -->> store all the dependencies to run application
 
 
 ## Steps:-
